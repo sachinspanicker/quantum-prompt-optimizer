@@ -159,7 +159,7 @@ def show_pricing_modal():
         with col2:
             if st.form_submit_button("Maybe Later"):
                 st.session_state.show_pricing = False
-                st.experimental_rerun()
+                st.rerun()
 
 # ============= QUANTUM RANDOM SERVICE (Same as before) =============
 class QuantumRandomService:
@@ -429,15 +429,15 @@ def main():
     """, unsafe_allow_html=True)
     
     # Check URL parameters for Stripe
-    query_params = st.experimental_get_query_params()
+    query_params = st.query_params
     if 'status' in query_params:
         if query_params['status'][0] == 'success':
             st.success("🎉 Welcome to Pro! Your subscription is now active.")
             st.session_state.user_tier = 'pro'
-            st.experimental_set_query_params()
+            st.query_params.clear()
         elif query_params['status'][0] == 'canceled':
             st.info("Checkout canceled. You can upgrade anytime!")
-            st.experimental_set_query_params()
+            st.query_params.clear()
     
     # Initialize session state
     if 'optimizer' not in st.session_state:
@@ -479,7 +479,7 @@ def main():
         if tier == 'free':
             if st.button("⭐ Upgrade to Pro", type="primary"):
                 st.session_state.show_pricing = True
-                st.experimental_rerun()
+                st.rerun()
         
         st.markdown("---")
         
@@ -549,7 +549,7 @@ def main():
             )
             if st.button("🚀 Upgrade to Pro"):
                 st.session_state.show_pricing = True
-                st.experimental_rerun()
+                st.rerun()
         else:
             remaining = PRICING_TIERS[tier]['limits']['generations_per_day'] - usage
             if tier == 'free' and remaining > 0:
